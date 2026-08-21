@@ -4,7 +4,7 @@ import './App.css'
 
 // Reception details
 const RECEPTION_DETAILS = {
-  groom: "Elancheziyan",
+  groom: "Elanchezhiyan",
   bride: "Panimalar",
   // Reception Date: September 13, 2026 at 6:30 PM
   targetDate: new Date(2026, 8, 13, 18, 30, 0),
@@ -116,7 +116,7 @@ export default function App() {
           <div className="logo-ring" />
           <img
             src={logoImg}
-            alt="Elancheziyan & Panimalar Monogram Logo"
+            alt="Elanchezhiyan & Panimalar Monogram Logo"
             className="app-logo"
             loading="eager"
           />
