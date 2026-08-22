@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { CONTENT } from './constants/content'
 import { useEventStatus } from './hooks/useEventStatus'
 import { usePetalShower } from './hooks/usePetalShower'
+import { useBackgroundAudio } from './hooks/useBackgroundAudio'
+import CinematicVideoIntro from './components/CinematicVideoIntro'
 import TopActions from './components/TopActions'
 import HeroSection from './components/HeroSection'
 import StatusBanner from './components/StatusBanner'
@@ -14,36 +16,62 @@ import './App.css'
 
 export default function App() {
   const [lang, setLang] = useState('en')
+  const [introCompleted, setIntroCompleted] = useState(false)
   const t = CONTENT[lang]
 
   const { eventStatus, timeLeft } = useEventStatus()
   const { petals, showerBlessings } = usePetalShower()
+  const { isPlaying, startAudio, toggleAudio } = useBackgroundAudio('/transtion.mp4')
+
+  // Called when video transition concludes to unlock the invitation page & celebrate
+  const handleIntroComplete = useCallback(() => {
+    setIntroCompleted(true)
+    showerBlessings()
+    startAudio()
+  }, [showerBlessings, startAudio])
 
   return (
-    <div className={`mobile-app-wrapper ${lang === 'ta' ? 'tamil-mode' : ''}`}>
-      {/* Interactive Floating Celebration Balloons (Move & Single-Touch Pop) */}
-      <FloatingBalloons />
+    <>
+      {/* Cinematic 4-Scene Video Flow: Opening Video (Loop) -> User Click -> Transition Video -> Invitation */}
+      {!introCompleted && (
+        <CinematicVideoIntro onComplete={handleIntroComplete} lang={lang} />
+      )}
 
-      {/* Falling Flower Petals & Sparkles */}
-      <PetalShower petals={petals} />
+      {/* Main Wedding Reception Invitation Page */}
+      <div
+        className={`mobile-app-wrapper ${lang === 'ta' ? 'tamil-mode' : ''} ${
+          introCompleted ? 'invitation-page-revealed' : 'invitation-page-hidden'
+        }`}
+      >
+        {/* Interactive Floating Celebration Balloons (Move & Single-Touch Pop) */}
+        {introCompleted && <FloatingBalloons />}
 
-      {/* Top Header Actions (Location Pin on Left & Language Toggle on Right) */}
-      <TopActions lang={lang} setLang={setLang} />
+        {/* Falling Flower Petals & Sparkles */}
+        <PetalShower petals={petals} />
 
-      {/* Royal Hero Section with Jharokha Arch & Monogram */}
-      <HeroSection t={t} lang={lang} onLogoClick={showerBlessings} />
+        {/* Top Header Actions (Location Pin & Audio Toggle on Left & Language Toggle on Right) */}
+        <TopActions
+          lang={lang}
+          setLang={setLang}
+          isPlaying={isPlaying}
+          toggleAudio={toggleAudio}
+        />
 
-      {/* Dynamic Lifecycle Banner (Countdown / Happening Now / Thank You) */}
-      <StatusBanner eventStatus={eventStatus} timeLeft={timeLeft} t={t} lang={lang} />
+        {/* Royal Hero Section with Jharokha Arch & Monogram */}
+        <HeroSection t={t} lang={lang} onLogoClick={showerBlessings} />
 
-      {/* Reception Details & Navigation Actions */}
-      <EventCard t={t} lang={lang} />
+        {/* Dynamic Lifecycle Banner (Countdown / Happening Now / Thank You) */}
+        <StatusBanner eventStatus={eventStatus} timeLeft={timeLeft} t={t} lang={lang} />
 
-      {/* Sticky Floating Mobile Blessings & Share Bar */}
-      <FloatingBar t={t} lang={lang} onShowerBlessings={showerBlessings} />
+        {/* Reception Details & Navigation Actions */}
+        <EventCard t={t} lang={lang} />
 
-      {/* Footer & Copyright */}
-      <Footer t={t} lang={lang} />
-    </div>
+        {/* Sticky Floating Mobile Blessings & Share Bar */}
+        <FloatingBar t={t} lang={lang} onShowerBlessings={showerBlessings} />
+
+        {/* Footer & Copyright */}
+        <Footer t={t} lang={lang} />
+      </div>
+    </>
   )
 }
