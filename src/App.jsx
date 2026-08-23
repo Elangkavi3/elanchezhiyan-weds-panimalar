@@ -49,12 +49,14 @@ export default function App() {
         {/* Falling Flower Petals & Sparkles */}
         <PetalShower petals={petals} />
 
-        {/* Top Header Actions (Location Pin & Audio Toggle on Left & Language Toggle on Right) */}
+        {/* Top Header Actions (Location, Audio, Flower Blessings, WhatsApp, Language) */}
         <TopActions
           lang={lang}
           setLang={setLang}
           isPlaying={isPlaying}
           toggleAudio={toggleAudio}
+          t={t}
+          onShowerBlessings={showerBlessings}
         />
 
         {/* Royal Hero Section with Jharokha Arch & Monogram */}

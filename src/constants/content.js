@@ -3,6 +3,7 @@ export const TARGET_DATE = new Date(2026, 8, 13, 18, 30, 0)
 export const EVENT_DURATION_HOURS = 5
 export const EVENT_END_DATE = new Date(TARGET_DATE.getTime() + EVENT_DURATION_HOURS * 60 * 60 * 1000)
 
+export const WEBSITE_URL = "https://elanchezhiyan-weds-panimalar.vercel.app/"
 export const MAPS_URL = "https://www.google.com/maps/place/Ashok+Mahaal/@12.7526117,78.698805,63m/data=!3m1!1e3!4m6!3m5!1s0x3bad087c311ea8fd:0x5586ba87a7ca2b99!8m2!3d12.7526875!4d78.6989375!16s%2Fg%2F11cn94d6w1"
 
 // Bilingual Content Dictionary
@@ -44,7 +45,7 @@ export const CONTENT = {
     footerQuote: "Your gracious presence is the greatest gift",
     footerCredits: "With Best Compliments From Family & Friends",
     calendarDesc: "You are cordially invited to celebrate the Wedding Reception of Elanchezhiyan & Panimalar at Ashok Mahaal.",
-    shareMsg: `✨ *Wedding Reception Invitation* ✨\n\nWe warmly invite you with your family and friends to celebrate the Grand Wedding Reception of:\n\n🤵 *Elanchezhiyan* & 👰 *Panimalar*\n\n📅 *Date:* Sunday, September 13, 2026\n⏰ *Time:* 6:30 PM Onwards\n📍 *Venue:* Ashok Mahaal\n🗺️ *Location:* ${MAPS_URL}\n\nLooking forward to celebrating with you! 🌸`
+    shareMsg: `✨ *Wedding Reception Invitation* ✨\n\nWarm Greetings! 🙏\n\nWith the blessings of Almighty and our elders, we cordially invite you with your family and friends to celebrate the joyous occasion of our *Grand Wedding Reception*.\n\n🤵 *Elanchezhiyan*\n        &\n👰 *Panimalar*\n\n━━━━━━━━━━━━━━━━━━━━\n📅 *Date:* Sunday, September 13, 2026\n⏰ *Time:* 6:30 PM Onwards\n🏛️ *Venue:* Ashok Mahaal\n━━━━━━━━━━━━━━━━━━━━\n\n💌 *Interactive Digital Invitation:*\n👉 ${WEBSITE_URL}\n\n📍 *Venue Location (Google Maps):*\n👉 ${MAPS_URL}\n\nYour gracious presence and heartfelt blessings are our greatest gift! Looking forward to celebrating with you. 🌸✨`
   },
   ta: {
     badge: "வரவேற்பு அழைப்பிதழ்",
@@ -83,6 +84,6 @@ export const CONTENT = {
     footerQuote: "தங்களின் வருகையே எங்களுக்குப் பெருமை",
     footerCredits: "உற்றார், உறவினர் மற்றும் நண்பர்களின் நல்வாழ்த்துகளுடன்",
     calendarDesc: "இளஞ்செழியன் & பனிமலர் அவர்களின் திருமண வரவேற்பு நல்விழா - அசோக் மஹால்.",
-    shareMsg: `✨ *திருமண வரவேற்பு அழைப்பிதழ்* ✨\n\nஎங்கள் திருமண வரவேற்பு நல்விழாவிற்கு தாங்களும் தங்களது குடும்பத்தினரும் வருகை தந்து எங்களை ஆசீர்வதிக்க அன்புடன் அழைக்கிறோம்!\n\nமணமக்கள்:\n🤵 *இளஞ்செழியன்* & 👰 *பனிமலர்*\n\n📅 *நாள்:* ஞாயிற்றுக்கிழமை, செப்டம்பர் 13, 2026\n⏰ *நேரம்:* மாலை 6:30 மணி முதல்\n📍 *இடம்:* அசோக் மஹால்\n🗺️ *கூகிள் மேப்:* ${MAPS_URL}\n\nதங்கள் வரவை நாடும் அன்புக் குடும்பத்தினர்! 🌸`
+    shareMsg: `✨ *மங்கலத் திருமண வரவேற்பு அழைப்பிதழ்* ✨\n\nவணக்கம்! 🙏\n\nஇறைவனின் திருவருளோடும், பெரியோர்களின் ஆசியோடும் நடைபெறும் எங்கள் *மங்கலத் திருமண வரவேற்பு நல்விழாவிற்கு* தாங்களும் தங்களது குடும்பத்தினரும் உற்றார் உறவினர்களோடு வருகை தந்து, எங்களை வாழ்த்தி அருளுமாறு அன்புடன் அழைக்கின்றோம்.\n\nமணமக்கள்:\n🤵 *இளஞ்செழியன்*\n        &\n👰 *பனிமலர்*\n\n━━━━━━━━━━━━━━━━━━━━\n📅 *நாள்:* ஞாயிற்றுக்கிழமை, செப்டம்பர் 13, 2026\n⏰ *நேரம்:* மாலை 6:30 மணி முதல்\n🏛️ *இடம்:* அசோக் மஹால்\n━━━━━━━━━━━━━━━━━━━━\n\n💌 *டிஜிட்டல் அழைப்பிதழ் காண:*\n👉 ${WEBSITE_URL}\n\n📍 *மண்டப இருப்பிடம் (கூகிள் மேப்):*\n👉 ${MAPS_URL}\n\nதங்களின் வருகையே எங்களுக்குப் பெருமை! அன்போடு வரவேற்கிறோம். 🌸✨`
   }
 }

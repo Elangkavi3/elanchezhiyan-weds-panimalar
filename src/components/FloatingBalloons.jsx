@@ -1,44 +1,78 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 /**
- * Authentic Festive Helium Balloon Color Palettes (Realistic 3D Latex Shading)
+ * Maximum total balloons on screen (strictly capped at 50)
+ */
+const MAX_BALLOONS = 50
+
+/**
+ * Multi-Tier Balloon Bounce Layers:
+ * - Layer 1 (Ceiling Line): 62px - 68px
+ * - Layer 2 (Under-Layer 2): 118px - 132px (bounces and rests directly below Layer 1)
+ * - Layer 3 (Under-Layer 3): 175px - 193px (bounces and rests directly below Layer 2)
+ */
+function getLayerCeilingY() {
+  const rand = Math.random()
+  if (rand < 0.45) {
+    // Layer 1: Top header line
+    return 62 + Math.random() * 6
+  } else if (rand < 0.80) {
+    // Layer 2: One layer below top
+    return 118 + Math.random() * 14
+  } else {
+    // Layer 3: Cascading layer below layer 2
+    return 175 + Math.random() * 18
+  }
+}
+
+/**
+ * Festive Helium Balloon Color Palettes (Realistic 3D Latex Shading)
  */
 const BALLOON_THEMES = [
   {
-    name: 'gold',
+    name: 'antique-gold',
     highlight: '#fef08a',
-    main: '#f59e0b',
-    shadow: '#92400e',
-    dropShadow: 'rgba(217, 119, 6, 0.4)',
+    main: '#ca8a04',
+    shadow: '#78350f',
+    dropShadow: 'rgba(202, 138, 4, 0.45)',
     stringColor: '#b45309',
-    sparkles: ['#ffd700', '#f59e0b', '#fff', '#fde047', '#d97706']
+    sparkles: ['#ffd700', '#fde047', '#fff', '#eab308', '#ca8a04']
   },
   {
-    name: 'ruby',
-    highlight: '#fda4af',
-    main: '#e11d48',
-    shadow: '#881337',
-    dropShadow: 'rgba(190, 18, 60, 0.45)',
-    stringColor: '#be123c',
-    sparkles: ['#f43f5e', '#be123c', '#ffe4e6', '#ffd700', '#fff']
+    name: 'peacock-teal',
+    highlight: '#67e8f9',
+    main: '#0f766e',
+    shadow: '#042f2e',
+    dropShadow: 'rgba(15, 118, 110, 0.5)',
+    stringColor: '#0d9488',
+    sparkles: ['#2dd4bf', '#0f766e', '#67e8f9', '#99f6e4', '#ffffff']
   },
   {
-    name: 'rose',
-    highlight: '#fff1f2',
-    main: '#fb7185',
-    shadow: '#9f1239',
-    dropShadow: 'rgba(244, 63, 94, 0.4)',
-    stringColor: '#e11d48',
-    sparkles: ['#fda4af', '#f43f5e', '#ffd700', '#ffffff']
+    name: 'gilded-gold-2',
+    highlight: '#fffbeb',
+    main: '#d97706',
+    shadow: '#92400e',
+    dropShadow: 'rgba(217, 119, 6, 0.45)',
+    stringColor: '#b45309',
+    sparkles: ['#ffd700', '#f59e0b', '#fef08a', '#ffffff', '#ca8a04']
   },
   {
-    name: 'rani-pink',
-    highlight: '#f5d0fe',
-    main: '#d946ef',
-    shadow: '#701a75',
-    dropShadow: 'rgba(192, 38, 211, 0.4)',
-    stringColor: '#a21caf',
-    sparkles: ['#f472b6', '#e879f9', '#c026d3', '#ffd700', '#ffffff']
+    name: 'bright-peacock',
+    highlight: '#a5f3fc',
+    main: '#0e7490',
+    shadow: '#083344',
+    dropShadow: 'rgba(14, 116, 144, 0.5)',
+    stringColor: '#074550',
+    sparkles: ['#06b6d4', '#0891b2', '#2dd4bf', '#a5f3fc', '#ffffff']
+  },
+  {
+    name: 'mint-seafoam',
+    highlight: '#ccfbf1',
+    main: '#0d9488',
+    shadow: '#064e3b',
+    dropShadow: 'rgba(13, 148, 136, 0.4)',
+    stringColor: '#0f766e',
+    sparkles: ['#14b8a6', '#0d9488', '#fef08a', '#ffd700', '#ffffff']
   }
 ]
 
@@ -46,30 +80,36 @@ let balloonCounter = 0
 let particleCounter = 0
 
 /**
- * Creates a natural, distortion-free vector balloon object
+ * Creates a helium balloon with silky-smooth continuous spring buoyancy
  */
-function createNewBalloon(initialY = null) {
+function createHeliumBalloon(initialY = null, targetCorner = null, forcedCeilingY = null) {
   const id = ++balloonCounter
   const theme = BALLOON_THEMES[Math.floor(Math.random() * BALLOON_THEMES.length)]
-  // Width 34px to 40px for natural mobile proportions
-  const width = Math.floor(Math.random() * 6) + 34
-  const x = Math.floor(Math.random() * 68) + 16
-  const y = initialY !== null ? initialY : Math.floor(Math.random() * 70) + 15
-  const floatSpeed = 0.05 + Math.random() * 0.06
-  const swaySpeed = 1.2 + Math.random() * 1.2
-  const swayAmount = 5 + Math.random() * 7
-  const wobbleAngle = (Math.random() - 0.5) * 10
-
+  const width = Math.floor(Math.random() * 5) + 33 // 33px to 37px
+  
+  // Left corner 6-22% | Right corner 76-92%
+  const isLeft = targetCorner !== null ? targetCorner === 'left' : Math.random() < 0.5
+  const ceilingX = isLeft
+    ? Math.floor(Math.random() * 16) + 6   // 6% to 22%
+    : Math.floor(Math.random() * 16) + 76  // 76% to 92%
+  
+  const screenH = typeof window !== 'undefined' ? window.innerHeight : 800
+  const y = initialY !== null ? initialY : screenH + 60
+  const x = initialY !== null ? ceilingX : Math.floor(Math.random() * 68) + 16
+  const ceilingY = forcedCeilingY !== null ? forcedCeilingY : getLayerCeilingY()
+  
   return {
     id,
     theme,
     width,
     x,
     y,
-    floatSpeed,
-    swaySpeed,
-    swayAmount,
-    wobbleAngle,
+    vy: initialY !== null ? 0 : -2.0, // initial upward rise
+    ceilingX,
+    ceilingY,
+    swaySpeed: 0.9 + Math.random() * 0.6,
+    swayAmount: 2.2 + Math.random() * 2.2,
+    wobbleAngle: (Math.random() - 0.5) * 6,
     time: Math.random() * 10,
     isDragging: false
   }
@@ -85,7 +125,7 @@ function generatePopParticles(balloon, clientX, clientY) {
 
   for (let i = 0; i < particleCount; i++) {
     const angle = (i / particleCount) * 2 * Math.PI + (Math.random() - 0.5) * 0.5
-    const distance = Math.floor(Math.random() * 30) + 24 // 24px to 54px radius
+    const distance = Math.floor(Math.random() * 32) + 24 // 24px to 56px radius
     const pColor = balloon.theme.sparkles[i % balloon.theme.sparkles.length]
     const pSize = Math.floor(Math.random() * 5) + 4
     const isStar = i % 3 === 0
@@ -132,19 +172,33 @@ function playPopSound() {
     osc.start()
     osc.stop(ctx.currentTime + 0.07)
   } catch {
-    // Audio context may be blocked by browser policy until interaction
+    // Audio context fallback
   }
 }
 
 /**
- * FloatingBalloons: Natural vector helium balloons with realistic 3D latex shading
- * - Authentic non-distorted balloon curvature with tied knot & curled ribbon
- * - Touch-draggable and single-tap pop burst with golden sparkles
+ * FloatingBalloons:
+ * - Strictly capped at 50 balloons total capacity
+ * - Continuous spawning up to 50 balloons; every pop replenishes back up to 50
+ * - Multi-Tier Layers (Layer 1, Layer 2, Layer 3) with continuous Hooke's Law spring buoyancy
  */
 export default function FloatingBalloons() {
+  // Initialize with cascading layers
   const [balloons, setBalloons] = useState(() => [
-    createNewBalloon(28),
-    createNewBalloon(72)
+    // Layer 1 (Top header line)
+    createHeliumBalloon(62, 'left', 62),
+    createHeliumBalloon(64, 'right', 64),
+    // Layer 2 (Right below Layer 1)
+    createHeliumBalloon(118, 'left', 118),
+    createHeliumBalloon(124, 'right', 124),
+    // Layer 3 (Cascading tier below Layer 2)
+    createHeliumBalloon(175, 'left', 175),
+    createHeliumBalloon(182, 'right', 182),
+    // Rising stream from bottom
+    createHeliumBalloon(360),
+    createHeliumBalloon(500),
+    createHeliumBalloon(640),
+    createHeliumBalloon(780)
   ])
   const [poppedParticles, setPoppedParticles] = useState([])
   const dragRef = useRef({
@@ -157,32 +211,76 @@ export default function FloatingBalloons() {
     hasMoved: false
   })
 
-  // Gentle upward floating and horizontal swaying loop
+  const lastSpawnTimeRef = useRef(0)
+  const animFrameRef = useRef(null)
+
+  // 60FPS fluid continuous spring physics with 50-balloon capacity cap
   useEffect(() => {
-    const interval = setInterval(() => {
+    lastSpawnTimeRef.current = Date.now()
+    let lastTime = performance.now()
+
+    const updatePhysics = (now) => {
+      const delta = Math.min((now - lastTime) / 1000, 0.04)
+      lastTime = now
+
       setBalloons((prev) => {
         let current = [...prev]
-        if (current.length < 3 && Math.random() < 0.12) {
-          current.push(createNewBalloon(105))
+
+        // Keep spawning until total balloon count reaches MAX_BALLOONS (50)
+        if (current.length < MAX_BALLOONS && Date.now() - lastSpawnTimeRef.current > 500) {
+          lastSpawnTimeRef.current = Date.now()
+          current.push(createHeliumBalloon())
         }
 
-        return current
-          .map((b) => {
-            if (b.isDragging) return b
-            const newY = b.y - b.floatSpeed
-            const newTime = b.time + 0.03
-            return {
-              ...b,
-              y: newY,
-              time: newTime
-            }
-          })
-          .filter((b) => b.y > -18)
+        return current.map((b) => {
+          if (b.isDragging) return b
+
+          const newTime = b.time + delta * 1.5
+
+          // 1. Continuous Hooke's Law Spring Buoyancy towards its target layer ceiling
+          const distToCeiling = b.ceilingY - b.y
+
+          const accelY = distToCeiling < -80
+            ? -0.12
+            : distToCeiling * 0.035 + Math.sin(newTime * b.swaySpeed) * 0.15
+
+          // Air resistance / damping
+          const damping = 0.94
+          let newVy = (b.vy + accelY) * damping
+
+          // Terminal upward speed limit for smooth visual pace
+          newVy = Math.max(-2.5, Math.min(2.0, newVy))
+          let newY = b.y + newVy
+
+          // Hard floor safety: cannot go above 58px header line
+          if (newY < 58) {
+            newY = 58
+            newVy = Math.abs(newVy) * 0.5 // soft bounce down
+          }
+
+          // 2. Continuous horizontal drift toward corner
+          const targetX = b.ceilingX + Math.sin(newTime * 0.8) * b.swayAmount
+          const newX = b.x + (targetX - b.x) * 0.035
+
+          return {
+            ...b,
+            x: newX,
+            y: newY,
+            vy: newVy,
+            time: newTime
+          }
+        })
       })
-    }, 35)
+
+      animFrameRef.current = requestAnimationFrame(updatePhysics)
+    }
+
+    animFrameRef.current = requestAnimationFrame(updatePhysics)
 
     return () => {
-      clearInterval(interval)
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current)
+      }
     }
   }, [])
 
@@ -193,28 +291,28 @@ export default function FloatingBalloons() {
     const newParticles = generatePopParticles(balloon, clientX, clientY)
     setPoppedParticles((prev) => [...prev, ...newParticles])
 
-    // Remove popped balloon immediately
+    // Remove popped balloon immediately (count decreases by 1)
     setBalloons((prev) => prev.filter((b) => b.id !== balloon.id))
 
-    // Remove sparkle particles after animation finishes (750ms)
+    // Clean up sparkle particles after animation finishes (750ms)
     setTimeout(() => {
       setPoppedParticles((prev) =>
         prev.filter((p) => !newParticles.some((np) => np.id === p.id))
       )
     }, 750)
 
-    // Respawn a fresh balloon from the bottom after 3 seconds
+    // Immediately spawn a replacement balloon from bottom up to the 50 limit!
     setTimeout(() => {
       setBalloons((prev) => {
-        if (prev.length < 3) {
-          return [...prev, createNewBalloon(105)]
+        if (prev.length < MAX_BALLOONS) {
+          return [...prev, createHeliumBalloon()]
         }
         return prev
       })
-    }, 3000)
+    }, 400)
   }, [])
 
-  // --- TOUCH / MOUSE HANDLERS ---
+  // --- TOUCH / MOUSE INTERACTION HANDLERS ---
   const handlePointerDown = useCallback((e, balloon) => {
     e.preventDefault()
     e.stopPropagation()
@@ -233,7 +331,7 @@ export default function FloatingBalloons() {
     }
 
     setBalloons((prev) =>
-      prev.map((b) => (b.id === balloon.id ? { ...b, isDragging: true } : b))
+      prev.map((b) => (b.id === balloon.id ? { ...b, isDragging: true, vy: 0 } : b))
     )
   }, [])
 
@@ -246,20 +344,22 @@ export default function FloatingBalloons() {
     const deltaX = clientX - dragRef.current.startX
     const deltaY = clientY - dragRef.current.startY
 
-    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+    if (Math.abs(deltaX) > 4 || Math.abs(deltaY) > 4) {
       dragRef.current.hasMoved = true
     }
 
     const percentDeltaX = (deltaX / window.innerWidth) * 100
-    const percentDeltaY = (deltaY / window.innerHeight) * 100
 
     setBalloons((prev) =>
       prev.map((b) => {
         if (b.id === dragRef.current.activeId) {
+          const newX = Math.max(4, Math.min(92, dragRef.current.initialX + percentDeltaX))
+          const newY = Math.max(58, dragRef.current.initialY + deltaY)
           return {
             ...b,
-            x: Math.max(6, Math.min(88, dragRef.current.initialX + percentDeltaX)),
-            y: dragRef.current.initialY + percentDeltaY
+            x: newX,
+            y: newY,
+            ceilingX: newX
           }
         }
         return b
@@ -277,7 +377,7 @@ export default function FloatingBalloons() {
     setBalloons((prev) => {
       const balloon = prev.find((b) => b.id === activeId)
       // Single tap / quick touch = POP
-      if (balloon && (!hasMoved || duration < 240)) {
+      if (balloon && (!hasMoved || duration < 220)) {
         const clientX = e.changedTouches
           ? e.changedTouches[0].clientX
           : e.clientX || dragRef.current.startX
@@ -288,7 +388,18 @@ export default function FloatingBalloons() {
         return prev
       }
 
-      return prev.map((b) => (b.id === activeId ? { ...b, isDragging: false } : b))
+      // Dragged / released: Balloon gently floats back up to its layer ceiling with organic spring
+      return prev.map((b) => {
+        if (b.id === activeId) {
+          return {
+            ...b,
+            ceilingX: b.x,
+            vy: -1.2,
+            isDragging: false
+          }
+        }
+        return b
+      })
     })
 
     dragRef.current.activeId = null
@@ -303,11 +414,10 @@ export default function FloatingBalloons() {
       onTouchEnd={handlePointerUp}
       aria-hidden="true"
     >
-      {/* 1. Authentic Vector 3D Latex Balloons */}
+      {/* Helium Balloons (Capped at 50 Balloons Total, 3-Layer Buoyancy) */}
       {balloons.map((balloon) => {
-        const swayOffset = Math.sin(balloon.time * balloon.swaySpeed) * balloon.swayAmount
-        const currentTilt = balloon.wobbleAngle + Math.cos(balloon.time * balloon.swaySpeed) * 4
-        const height = balloon.width * 1.62 // natural height ratio including tied ribbon
+        const currentTilt = balloon.wobbleAngle + Math.cos(balloon.time * balloon.swaySpeed) * 3
+        const height = balloon.width * 1.62
 
         return (
           <div
@@ -315,17 +425,17 @@ export default function FloatingBalloons() {
             className={`floating-balloon-item ${balloon.isDragging ? 'is-dragging' : ''}`}
             style={{
               left: `${balloon.x}%`,
-              top: `${balloon.y}%`,
+              top: `${balloon.y}px`,
               width: `${balloon.width}px`,
               height: `${height}px`,
-              transform: `translate3d(${swayOffset}px, 0, 0) rotate(${currentTilt}deg)`,
+              transform: `rotate(${currentTilt}deg)`,
               cursor: 'grab'
             }}
             onMouseDown={(e) => handlePointerDown(e, balloon)}
             onTouchStart={(e) => handlePointerDown(e, balloon)}
-            title="Tap to pop or drag around!"
+            title="Drag down or tap to pop!"
           >
-            {/* Authentic SVG Vector Balloon with 3D Spherical Latex Volume */}
+            {/* 3D Latex Vector Balloon Graphic */}
             <svg
               viewBox="0 0 60 98"
               width="100%"
@@ -337,7 +447,7 @@ export default function FloatingBalloons() {
               <defs>
                 {/* 3D Radial Latex Gradient */}
                 <radialGradient id={`balloonShading-${balloon.id}`} cx="35%" cy="30%" r="65%">
-                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.88" />
                   <stop offset="25%" stopColor={balloon.theme.highlight} stopOpacity="1" />
                   <stop offset="65%" stopColor={balloon.theme.main} stopOpacity="1" />
                   <stop offset="100%" stopColor={balloon.theme.shadow} stopOpacity="1" />
@@ -346,7 +456,7 @@ export default function FloatingBalloons() {
                 {/* Soft Bottom Rim Glow */}
                 <linearGradient id={`rimLight-${balloon.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="70%" stopColor={balloon.theme.main} stopOpacity="0" />
-                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0.35" />
+                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0.38" />
                 </linearGradient>
               </defs>
 
@@ -357,7 +467,7 @@ export default function FloatingBalloons() {
                 rx="26"
                 ry="30"
                 fill={balloon.theme.dropShadow}
-                opacity="0.25"
+                opacity="0.28"
                 transform="translate(0, 4)"
               />
 
@@ -391,7 +501,7 @@ export default function FloatingBalloons() {
                 fill={`url(#rimLight-${balloon.id})`}
               />
 
-              {/* 3D Specular Light Reflection */}
+              {/* 3D Specular Light Reflections */}
               <ellipse
                 cx="20"
                 cy="18"
@@ -399,7 +509,7 @@ export default function FloatingBalloons() {
                 ry="13"
                 transform="rotate(-28 20 18)"
                 fill="#ffffff"
-                opacity="0.55"
+                opacity="0.6"
               />
               <ellipse
                 cx="18"
@@ -408,7 +518,7 @@ export default function FloatingBalloons() {
                 ry="6.5"
                 transform="rotate(-28 18 14)"
                 fill="#ffffff"
-                opacity="0.9"
+                opacity="0.92"
               />
 
               {/* Tied Balloon Knot */}
@@ -421,14 +531,14 @@ export default function FloatingBalloons() {
                 strokeWidth="1.3"
                 strokeLinecap="round"
                 fill="none"
-                opacity="0.75"
+                opacity="0.8"
               />
             </svg>
           </div>
         )
       })}
 
-      {/* 2. Burst Pop Sparkle Particles Explosion */}
+      {/* Burst Pop Sparkle Particles Explosion */}
       {poppedParticles.map((p) => (
         <div
           key={p.id}
