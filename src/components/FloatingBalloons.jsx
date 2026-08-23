@@ -1,11 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 /**
- * Maximum total balloons on screen (strictly capped at 50)
- */
-const MAX_BALLOONS = 50
-
-/**
  * Multi-Tier Balloon Bounce Layers:
  * - Layer 1 (Ceiling Line): 62px - 68px
  * - Layer 2 (Under-Layer 2): 118px - 132px (bounces and rests directly below Layer 1)
@@ -80,7 +75,7 @@ let balloonCounter = 0
 let particleCounter = 0
 
 /**
- * Creates a helium balloon with silky-smooth continuous spring buoyancy
+ * Creates a helium balloon with slow, gentle upward flow
  */
 function createHeliumBalloon(initialY = null, targetCorner = null, forcedCeilingY = null) {
   const id = ++balloonCounter
@@ -94,7 +89,7 @@ function createHeliumBalloon(initialY = null, targetCorner = null, forcedCeiling
     : Math.floor(Math.random() * 16) + 76  // 76% to 92%
   
   const screenH = typeof window !== 'undefined' ? window.innerHeight : 800
-  const y = initialY !== null ? initialY : screenH + 60
+  const y = initialY !== null ? initialY : screenH + 40
   const x = initialY !== null ? ceilingX : Math.floor(Math.random() * 68) + 16
   const ceilingY = forcedCeilingY !== null ? forcedCeilingY : getLayerCeilingY()
   
@@ -104,11 +99,11 @@ function createHeliumBalloon(initialY = null, targetCorner = null, forcedCeiling
     width,
     x,
     y,
-    vy: initialY !== null ? 0 : -2.0, // initial upward rise
+    vy: initialY !== null ? 0 : -(1.0 + Math.random() * 0.4), // slow, gentle upward float
     ceilingX,
     ceilingY,
-    swaySpeed: 0.9 + Math.random() * 0.6,
-    swayAmount: 2.2 + Math.random() * 2.2,
+    swaySpeed: 0.8 + Math.random() * 0.5,
+    swayAmount: 2.2 + Math.random() * 2.0,
     wobbleAngle: (Math.random() - 0.5) * 6,
     time: Math.random() * 10,
     isDragging: false
@@ -178,27 +173,19 @@ function playPopSound() {
 
 /**
  * FloatingBalloons:
- * - Strictly capped at 50 balloons total capacity
- * - Continuous spawning up to 50 balloons; every pop replenishes back up to 50
+ * - Slow, peaceful upward flow of balloons (no crowd rush at start)
+ * - Starts with 3 subtle balloons, spawning gently one-by-one every ~3.5s
  * - Multi-Tier Layers (Layer 1, Layer 2, Layer 3) with continuous Hooke's Law spring buoyancy
  */
 export default function FloatingBalloons() {
-  // Initialize with cascading layers
+  // Start with just 3 gentle balloons (2 in top corners + 1 rising)
   const [balloons, setBalloons] = useState(() => [
-    // Layer 1 (Top header line)
-    createHeliumBalloon(62, 'left', 62),
-    createHeliumBalloon(64, 'right', 64),
-    // Layer 2 (Right below Layer 1)
-    createHeliumBalloon(118, 'left', 118),
-    createHeliumBalloon(124, 'right', 124),
-    // Layer 3 (Cascading tier below Layer 2)
-    createHeliumBalloon(175, 'left', 175),
-    createHeliumBalloon(182, 'right', 182),
-    // Rising stream from bottom
-    createHeliumBalloon(360),
-    createHeliumBalloon(500),
-    createHeliumBalloon(640),
-    createHeliumBalloon(780)
+    // Top Left Corner (Gold)
+    createHeliumBalloon(64, 'left', 64),
+    // Top Right Corner (Peacock Blue)
+    createHeliumBalloon(66, 'right', 66),
+    // 1 gentle rising balloon from below
+    createHeliumBalloon(480)
   ])
   const [poppedParticles, setPoppedParticles] = useState([])
   const dragRef = useRef({
@@ -214,7 +201,7 @@ export default function FloatingBalloons() {
   const lastSpawnTimeRef = useRef(0)
   const animFrameRef = useRef(null)
 
-  // 60FPS fluid continuous spring physics with 50-balloon capacity cap
+  // 60FPS fluid continuous spring physics with slow, steady spawning
   useEffect(() => {
     lastSpawnTimeRef.current = Date.now()
     let lastTime = performance.now()
@@ -226,8 +213,8 @@ export default function FloatingBalloons() {
       setBalloons((prev) => {
         let current = [...prev]
 
-        // Keep spawning until total balloon count reaches MAX_BALLOONS (50)
-        if (current.length < MAX_BALLOONS && Date.now() - lastSpawnTimeRef.current > 500) {
+        // Slow, steady spawning: launch a fresh balloon only every 3.5 seconds
+        if (current.length < 8 && Date.now() - lastSpawnTimeRef.current > 3500) {
           lastSpawnTimeRef.current = Date.now()
           current.push(createHeliumBalloon())
         }
@@ -241,26 +228,26 @@ export default function FloatingBalloons() {
           const distToCeiling = b.ceilingY - b.y
 
           const accelY = distToCeiling < -80
-            ? -0.12
-            : distToCeiling * 0.035 + Math.sin(newTime * b.swaySpeed) * 0.15
+            ? -0.08 // calm, slow steady upward rise
+            : distToCeiling * 0.035 + Math.sin(newTime * b.swaySpeed) * 0.12
 
           // Air resistance / damping
-          const damping = 0.94
+          const damping = 0.95
           let newVy = (b.vy + accelY) * damping
 
-          // Terminal upward speed limit for smooth visual pace
-          newVy = Math.max(-2.5, Math.min(2.0, newVy))
+          // Gentle terminal velocity limit
+          newVy = Math.max(-1.8, Math.min(1.6, newVy))
           let newY = b.y + newVy
 
           // Hard floor safety: cannot go above 58px header line
           if (newY < 58) {
             newY = 58
-            newVy = Math.abs(newVy) * 0.5 // soft bounce down
+            newVy = Math.abs(newVy) * 0.4
           }
 
           // 2. Continuous horizontal drift toward corner
-          const targetX = b.ceilingX + Math.sin(newTime * 0.8) * b.swayAmount
-          const newX = b.x + (targetX - b.x) * 0.035
+          const targetX = b.ceilingX + Math.sin(newTime * 0.7) * b.swayAmount
+          const newX = b.x + (targetX - b.x) * 0.03
 
           return {
             ...b,
@@ -291,7 +278,7 @@ export default function FloatingBalloons() {
     const newParticles = generatePopParticles(balloon, clientX, clientY)
     setPoppedParticles((prev) => [...prev, ...newParticles])
 
-    // Remove popped balloon immediately (count decreases by 1)
+    // Remove popped balloon immediately
     setBalloons((prev) => prev.filter((b) => b.id !== balloon.id))
 
     // Clean up sparkle particles after animation finishes (750ms)
@@ -301,15 +288,15 @@ export default function FloatingBalloons() {
       )
     }, 750)
 
-    // Immediately spawn a replacement balloon from bottom up to the 50 limit!
+    // Spawn a fresh replacement balloon slowly after 1.5 seconds
     setTimeout(() => {
       setBalloons((prev) => {
-        if (prev.length < MAX_BALLOONS) {
+        if (prev.length < 8) {
           return [...prev, createHeliumBalloon()]
         }
         return prev
       })
-    }, 400)
+    }, 1500)
   }, [])
 
   // --- TOUCH / MOUSE INTERACTION HANDLERS ---
@@ -394,7 +381,7 @@ export default function FloatingBalloons() {
           return {
             ...b,
             ceilingX: b.x,
-            vy: -1.2,
+            vy: -1.0,
             isDragging: false
           }
         }
@@ -414,7 +401,7 @@ export default function FloatingBalloons() {
       onTouchEnd={handlePointerUp}
       aria-hidden="true"
     >
-      {/* Helium Balloons (Capped at 50 Balloons Total, 3-Layer Buoyancy) */}
+      {/* Helium Balloons (Slow, Peaceful Upward Flow & Multi-Tier Buoyancy) */}
       {balloons.map((balloon) => {
         const currentTilt = balloon.wobbleAngle + Math.cos(balloon.time * balloon.swaySpeed) * 3
         const height = balloon.width * 1.62
