@@ -6,6 +6,7 @@ import { useBackgroundAudio } from './hooks/useBackgroundAudio'
 import CinematicVideoIntro from './components/CinematicVideoIntro'
 import TopActions from './components/TopActions'
 import HeroSection from './components/HeroSection'
+import ScrollZoomBackground from './components/ScrollZoomBackground'
 import StatusBanner from './components/StatusBanner'
 import EventCard from './components/EventCard'
 import FloatingBar from './components/FloatingBar'
@@ -43,6 +44,9 @@ export default function App() {
           introCompleted ? 'invitation-page-revealed' : 'invitation-page-hidden'
         }`}
       >
+        {/* Dynamic Scroll-to-Zoom Background (Replaces card.png) */}
+        <ScrollZoomBackground />
+
         {/* Interactive Floating Celebration Balloons (Move & Single-Touch Pop) */}
         {introCompleted && <FloatingBalloons />}
 

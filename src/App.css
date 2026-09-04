@@ -18,26 +18,12 @@
   padding-bottom: 36px;
 }
 
-/* Top Natural-Sized Translucent Card PNG Background */
+/* Top Background replaced by interactive ScrollZoomBackground component */
 .mobile-app-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 600px;
-  background-image: 
-    linear-gradient(180deg, rgba(240, 253, 250, 0.2) 0%, rgba(230, 244, 241, 0.55) 60%, rgba(240, 253, 250, 0.95) 100%),
-    url('/card.png');
-  background-size: 100% auto;
-  background-position: top center;
-  background-repeat: no-repeat;
-  opacity: 0.48;
-  pointer-events: none;
-  z-index: 0;
+  display: none;
 }
 
-/* Bottom Horizontally-Mirrored (Left to Right) Card Background on Scroll */
+/* Bottom Horizontally-Mirrored (Left to Right) Heartlayout Background on Scroll */
 .mobile-app-wrapper::after {
   content: '';
   position: absolute;
@@ -47,12 +33,12 @@
   height: 600px;
   background-image: 
     linear-gradient(180deg, rgba(240, 253, 250, 0.95) 0%, rgba(230, 244, 241, 0.55) 45%, rgba(240, 253, 250, 0.2) 100%),
-    url('/card.png');
-  background-size: 100% auto;
-  background-position: top center;
+    url('/Heartlayout_mobile.webp');
+  background-size: cover;
+  background-position: bottom center;
   background-repeat: no-repeat;
   transform: scaleX(-1);
-  opacity: 0.48;
+  opacity: 0.38;
   pointer-events: none;
   z-index: 0;
 }
@@ -79,7 +65,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 16px;
+  padding: 7px 14px;
   background: rgba(240, 253, 250, 0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -91,7 +77,7 @@
 
 .top-actions-spacer {
   width: 100%;
-  height: 56px;
+  height: 46px;
   flex-shrink: 0;
   display: block;
 }
@@ -372,9 +358,9 @@
    ======================================================== */
 .hero-section {
   position: relative;
-  padding: 20px 16px 24px;
+  padding: 8px 16px 20px;
   text-align: center;
-  background: radial-gradient(circle at 50% 25%, rgba(240, 253, 250, 0.75) 0%, rgba(230, 244, 241, 0.65) 45%, rgba(204, 237, 232, 0.8) 100%);
+  background: radial-gradient(circle at 50% 25%, rgba(240, 253, 250, 0.35) 0%, rgba(230, 244, 241, 0.5) 45%, rgba(204, 237, 232, 0.72) 100%);
   border-bottom: 2px solid rgba(15, 118, 110, 0.2);
   overflow: hidden;
   z-index: 1;
@@ -400,15 +386,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   position: relative;
   z-index: 1;
 }
 
 .toran-svg {
   width: 100%;
-  max-width: 260px;
-  height: 36px;
+  max-width: 250px;
+  height: 28px;
 }
 
 .invitation-badge {
@@ -416,13 +402,13 @@
   background: linear-gradient(135deg, #f0fdfa 0%, #ccede8 100%);
   color: var(--peacock-primary);
   border: 1.5px solid #99f6e4;
-  padding: 4px 16px;
+  padding: 3px 14px;
   border-radius: 20px;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
   box-shadow: 0 2px 6px rgba(15, 118, 110, 0.08);
   position: relative;
   z-index: 1;
@@ -437,8 +423,8 @@
   justify-content: center;
   width: max-content;
   max-width: 90%;
-  margin: 4px auto 16px;
-  padding: 14px 22px;
+  margin: 2px auto 14px;
+  padding: 12px 20px;
   background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.98) 0%, rgba(204, 237, 232, 0.45) 70%, transparent 100%);
   border-radius: 110px 110px 20px 20px;
   border: 2px solid rgba(15, 118, 110, 0.35);
@@ -1494,3 +1480,61 @@
   opacity: 1;
   transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ========================================================
+   SCROLL-TO-ZOOM BACKGROUND (REPLACES CARD.PNG)
+   ======================================================== */
+.scroll-zoom-bg-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 820px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.scroll-zoom-bg-container {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 820px;
+  overflow: hidden;
+}
+
+.scroll-zoom-bg-picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-zoom-bg-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform 0.08s ease-out;
+  opacity: 0.65;
+}
+
+/* Translucent Watercolor Gradient Overlay for Royal Theme & High Legibility */
+.scroll-zoom-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(240, 253, 250, 0.22) 0%,
+    rgba(230, 244, 241, 0.45) 50%,
+    rgba(240, 253, 250, 0.85) 80%,
+    #fbfdfc 100%
+  );
+  pointer-events: none;
+}
+
+
