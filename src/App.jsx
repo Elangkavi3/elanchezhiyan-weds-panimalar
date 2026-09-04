@@ -13,11 +13,13 @@ import FloatingBar from './components/FloatingBar'
 import PetalShower from './components/PetalShower'
 import FloatingBalloons from './components/FloatingBalloons'
 import Footer from './components/Footer'
+import GalleryModal from './components/GalleryModal'
 import './App.css'
 
 export default function App() {
   const [lang, setLang] = useState('en')
   const [introCompleted, setIntroCompleted] = useState(false)
+  const [galleryOpen, setGalleryOpen] = useState(false)
   const t = CONTENT[lang]
 
   const { eventStatus, timeLeft } = useEventStatus()
@@ -53,7 +55,7 @@ export default function App() {
         {/* Falling Flower Petals & Sparkles */}
         <PetalShower petals={petals} />
 
-        {/* Top Header Actions (Location, Audio, Flower Blessings, WhatsApp, Language) */}
+        {/* Top Header Actions (Location, Audio, Flower Blessings, Photo Gallery, WhatsApp, Language) */}
         <TopActions
           lang={lang}
           setLang={setLang}
@@ -61,6 +63,7 @@ export default function App() {
           toggleAudio={toggleAudio}
           t={t}
           onShowerBlessings={showerBlessings}
+          onOpenGallery={() => setGalleryOpen(true)}
         />
 
         {/* Royal Hero Section with Jharokha Arch & Monogram */}
@@ -80,6 +83,14 @@ export default function App() {
 
         {/* Footer & Copyright */}
         <Footer t={t} lang={lang} />
+
+        {/* Wedding Photo Album Gallery Modal (Stacked Zigzag Cards) */}
+        <GalleryModal
+          isOpen={galleryOpen}
+          onClose={() => setGalleryOpen(false)}
+          lang={lang}
+          onShowerBlessings={showerBlessings}
+        />
       </div>
     </>
   )

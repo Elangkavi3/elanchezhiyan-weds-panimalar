@@ -321,6 +321,41 @@
   display: block;
 }
 
+/* Photo Gallery Button in Header */
+.trending-gallery-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #9a3412 100%);
+  color: #ffffff;
+  border: 1.5px solid #fde047;
+  box-shadow: 0 4px 12px rgba(180, 83, 9, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.trending-gallery-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.55);
+}
+
+.trending-gallery-btn:active {
+  transform: scale(0.92);
+}
+
+.trending-gallery-btn .gallery-svg-icon {
+  width: 16px;
+  height: 16px;
+  color: #ffffff;
+  display: block;
+}
+
 /* Compact Language Switcher Pill (Far Right) */
 .lang-toggle-pill {
   display: inline-flex;
@@ -1344,6 +1379,424 @@
   100% {
     opacity: 0;
     transform: scale(0.65) rotate(-8deg) translateY(35px);
+  }
+}
+
+/* ========================================================
+   WEDDING PHOTO ALBUM GALLERY (STACKED ZIGZAG CARDS MODAL)
+   ======================================================== */
+.gallery-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(8, 12, 11, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+  cursor: pointer;
+  animation: galleryBackdropIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  touch-action: manipulation;
+}
+
+.gallery-modal-backdrop.gallery-modal-closing {
+  animation: galleryBackdropOut 0.26s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* Top Information Bar with Photo Counter */
+.gallery-modal-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.gallery-counter-pill {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  color: #fef08a;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Stacked Cards Wrapper & 3D Deck */
+.gallery-cards-stack-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 330px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+.gallery-cards-deck {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 440px;
+}
+
+/* Picture Frame Card (Luxury Editorial Style) */
+.gallery-frame-card {
+  background: #ffffff;
+  padding: 10px 10px 16px 10px;
+  border-radius: 8px;
+  box-shadow:
+    0 25px 60px -10px rgba(0, 0, 0, 0.75),
+    0 10px 25px -5px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(212, 175, 55, 0.45),
+    0 0 32px rgba(212, 175, 55, 0.28);
+  width: 100%;
+  max-width: 320px;
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Active Top Card: Interactive on Touch */
+.gallery-card-active {
+  position: relative;
+  z-index: 5;
+  cursor: pointer;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: galleryCardIntro 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+}
+
+.gallery-card-active:hover {
+  filter: brightness(1.02);
+}
+
+/* Cards Stacked Underneath (Zigzag Depth Effect) */
+.gallery-card-under-1 {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  filter: brightness(0.88);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.gallery-card-under-2 {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  filter: brightness(0.72);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.gallery-img-placeholder {
+  width: 100%;
+  aspect-ratio: 3 / 4.2;
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+/* Inner Frame & Photo Border */
+.gallery-card-inner-frame {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1.5px solid rgba(212, 175, 55, 0.65);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.3);
+  background: #0f172a;
+}
+
+.gallery-picture {
+  display: block;
+  width: 100%;
+}
+
+.gallery-card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 62vh;
+  object-fit: cover;
+  aspect-ratio: 3 / 4.2;
+  border-radius: 3px;
+  filter: contrast(1.03) brightness(1.02);
+}
+
+/* Glass Reflection across picture */
+.gallery-glass-reflection {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    130deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.08) 28%,
+    transparent 48%,
+    rgba(255, 255, 255, 0.06) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Card Bottom Footer Accent */
+.gallery-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.gallery-card-monogram {
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  opacity: 0.85;
+}
+
+/* Dedicated '✕' Close Button on the Picture Card */
+.gallery-card-close-btn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  z-index: 20;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+  color: #ffffff;
+  border: 2px solid #fde047;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55), 0 0 10px rgba(253, 224, 71, 0.4);
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
+  line-height: 1;
+  padding: 0;
+}
+
+.gallery-card-close-btn:hover {
+  transform: scale(1.15);
+  background: #b91c1c;
+}
+
+.gallery-card-close-btn:active {
+  transform: scale(0.9);
+}
+
+/* ========================================================
+   END CARD: "We are awaiting for your blessings"
+   ======================================================== */
+.gallery-end-card {
+  position: relative;
+  z-index: 5;
+  background: linear-gradient(150deg, #ffffff 0%, #fefcf3 50%, #fdf8eb 100%);
+  border: 2px solid #d4af37;
+  padding: 26px 20px;
+  border-radius: 12px;
+  box-shadow:
+    0 30px 70px -10px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(212, 175, 55, 0.4);
+  animation: galleryCardIntro 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+  cursor: default;
+}
+
+.gallery-end-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.gallery-end-crest {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fef08a 0%, #d4af37 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+  margin-bottom: 14px;
+}
+
+.gallery-crest-gem {
+  color: #78350f;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.gallery-end-title {
+  font-family: var(--font-playfair);
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--crimson-dark);
+  line-height: 1.38;
+  margin: 0 0 8px 0;
+  text-shadow: 0 1px 2px rgba(180, 83, 9, 0.15);
+}
+
+.gallery-end-title.tamil-font {
+  font-family: var(--font-tamil) !important;
+  font-size: 19px;
+  line-height: 1.45;
+}
+
+.gallery-end-sub-en {
+  font-family: var(--font-playfair);
+  font-size: 14px;
+  font-weight: 600;
+  color: #78350f;
+  margin: 0 0 10px 0;
+  font-style: italic;
+}
+
+.gallery-end-divider {
+  width: 100%;
+  max-width: 180px;
+  margin: 8px auto 12px auto;
+  opacity: 0.85;
+}
+
+.gallery-divider-svg {
+  width: 100%;
+  height: 18px;
+  color: #d4af37;
+  display: block;
+}
+
+.gallery-end-couple-names {
+  font-family: var(--font-playfair);
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: 0.8px;
+  margin: 0 0 20px 0;
+}
+
+.gallery-end-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.gallery-blessings-btn {
+  background: var(--crimson-gradient);
+  color: #ffffff;
+  border: 1.5px solid #fde047;
+  border-radius: 25px;
+  padding: 11px 22px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(185, 28, 28, 0.35);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  width: 100%;
+  max-width: 240px;
+}
+
+.gallery-blessings-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(185, 28, 28, 0.5);
+}
+
+.gallery-blessings-btn:active {
+  transform: scale(0.96);
+}
+
+.gallery-close-text-btn {
+  background: transparent;
+  border: 1px solid rgba(180, 83, 9, 0.3);
+  color: #78350f;
+  border-radius: 20px;
+  padding: 6px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gallery-close-text-btn:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: #d4af37;
+}
+
+/* ========================================================
+   CARD DISCARD ANIMATIONS (PHYSICAL THROW EFFECT)
+   ======================================================== */
+.gallery-card-discard-right {
+  animation: cardDiscardRight 0.28s cubic-bezier(0.2, 0.8, 0.4, 1) forwards !important;
+  pointer-events: none;
+}
+
+.gallery-card-discard-left {
+  animation: cardDiscardLeft 0.28s cubic-bezier(0.2, 0.8, 0.4, 1) forwards !important;
+  pointer-events: none;
+}
+
+@keyframes cardDiscardRight {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--card-angle, -3deg)) scale(1) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(18deg) scale(0.85) translate(130%, -25px);
+  }
+}
+
+@keyframes cardDiscardLeft {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--card-angle, 3deg)) scale(1) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(-18deg) scale(0.85) translate(-130%, -25px);
+  }
+}
+
+@keyframes galleryCardIntro {
+  0% {
+    opacity: 0;
+    transform: scale(0.65) translateY(40px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.02) translateY(-3px);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes galleryBackdropIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes galleryBackdropOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 

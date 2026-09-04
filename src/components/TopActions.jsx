@@ -1,9 +1,9 @@
 import { MAPS_URL } from '../constants/content'
-import { LocationPinIcon, WhatsAppIcon, FlowerIcon } from './svgs/Icons'
+import { LocationPinIcon, WhatsAppIcon, FlowerIcon, GalleryIcon } from './svgs/Icons'
 
 /**
  * Top Actions Navigation Bar (100% Fixed Header):
- * - Left Actions: Location Pin + Audio Music BGM + Flower Blessings Shower + WhatsApp Share
+ * - Left Actions: Location Pin + Audio Music BGM + Flower Blessings Shower + Photo Gallery + WhatsApp Share
  * - Right: Compact Language Toggle Pill (EN | தமிழ்)
  */
 export default function TopActions({
@@ -12,7 +12,8 @@ export default function TopActions({
   isPlaying,
   toggleAudio,
   t,
-  onShowerBlessings
+  onShowerBlessings,
+  onOpenGallery
 }) {
   const shareMessage = t ? encodeURIComponent(t.shareMsg) : ''
 
@@ -84,7 +85,20 @@ export default function TopActions({
             </button>
           )}
 
-          {/* 4. WhatsApp Share Button (Icon Only) */}
+          {/* 4. Photo Gallery Button */}
+          {onOpenGallery && (
+            <button
+              type="button"
+              className="trending-gallery-btn"
+              onClick={onOpenGallery}
+              title={lang === 'ta' ? 'புகைப்பட தொகுப்பு' : 'Photo Gallery'}
+              aria-label={lang === 'ta' ? 'புகைப்பட தொகுப்பு' : 'Photo Gallery'}
+            >
+              <GalleryIcon className="gallery-svg-icon" />
+            </button>
+          )}
+
+          {/* 5. WhatsApp Share Button (Icon Only) */}
           {shareMessage && (
             <a
               href={`https://api.whatsapp.com/send?text=${shareMessage}`}
