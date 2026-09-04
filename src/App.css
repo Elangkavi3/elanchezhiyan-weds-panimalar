@@ -1164,6 +1164,25 @@
 .copyright-author {
   font-weight: 800;
   color: var(--crimson-dark);
+  cursor: pointer;
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 6px;
+  text-decoration: underline;
+  text-decoration-color: rgba(180, 83, 9, 0.4);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.copyright-author:hover,
+.copyright-author:focus-visible {
+  color: #b91c1c;
+  background: rgba(212, 175, 55, 0.16);
+  text-decoration-color: var(--gold-bright);
+  transform: translateY(-1px);
+  outline: none;
 }
 
 .copyright-subtext {
@@ -1171,6 +1190,161 @@
   color: #a89f91;
   letter-spacing: 1px;
   text-transform: uppercase;
+}
+
+/* ========================================================
+   KAVI MODEL FRAMED PICTURE MODAL (CLICK ANYWHERE TO CLOSE)
+   ======================================================== */
+.kavi-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(10, 15, 13, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 18px;
+  cursor: pointer;
+  animation: kaviModalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  touch-action: manipulation;
+}
+
+.kavi-modal-backdrop.kavi-modal-closing {
+  animation: kaviModalFadeOut 0.26s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.kavi-frame-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 340px;
+  width: 100%;
+  cursor: pointer;
+  animation: kaviCardPopIn 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+}
+
+.kavi-frame-container.kavi-frame-closing {
+  animation: kaviCardPopOut 0.26s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* Luxurious Gallery / Model-Shot Picture Frame */
+.kavi-gallery-frame {
+  position: relative;
+  background: #ffffff;
+  padding: 12px 12px 18px 12px;
+  border-radius: 8px;
+  box-shadow:
+    0 25px 60px -10px rgba(0, 0, 0, 0.7),
+    0 12px 28px -6px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(212, 175, 55, 0.5),
+    0 0 35px rgba(212, 175, 55, 0.35);
+  transform-origin: center center;
+  overflow: hidden;
+  transition: transform 0.25s ease;
+}
+
+/* Subtle Golden Accent Border Inside the Frame */
+.kavi-frame-inner-border {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1.5px solid rgba(212, 175, 55, 0.65);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.25);
+  background: #0f172a;
+}
+
+.kavi-picture {
+  display: block;
+  width: 100%;
+}
+
+.kavi-portrait-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 68vh;
+  object-fit: cover;
+  aspect-ratio: 3 / 4.2;
+  border-radius: 3px;
+  filter: contrast(1.04) brightness(1.02);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Subtle Glass Reflection on Frame */
+.kavi-glass-reflection {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    130deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.08) 28%,
+    transparent 48%,
+    rgba(255, 255, 255, 0.06) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Bottom Frame Accent (Editorial Star Monogram) */
+.kavi-frame-matte::after {
+  content: '✦';
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  color: #d4af37;
+  font-size: 11px;
+  letter-spacing: 6px;
+  opacity: 0.8;
+  line-height: 1;
+}
+
+/* Backdrop Fade Animations */
+@keyframes kaviModalFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes kaviModalFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Tilted Model Frame Pop Entrance/Exit Animations */
+@keyframes kaviCardPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) rotate(-11deg) translateY(45px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.03) rotate(-2.8deg) translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-3.5deg) translateY(0);
+  }
+}
+
+@keyframes kaviCardPopOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(-3.5deg) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.65) rotate(-8deg) translateY(35px);
+  }
 }
 
 /* Tamil typography adjustments */
