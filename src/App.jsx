@@ -72,6 +72,9 @@ export default function App() {
         {/* Reception Details & Navigation Actions */}
         <EventCard t={t} lang={lang} />
 
+        {/* 20% Visual Viewing Gap for Below View (Level Couple Photo) */}
+        <div className="below-view-gap" aria-hidden="true" />
+
         {/* Sticky Floating Mobile Blessings & Share Bar */}
         <FloatingBar t={t} lang={lang} onShowerBlessings={showerBlessings} />
 

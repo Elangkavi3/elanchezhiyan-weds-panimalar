@@ -2,6 +2,7 @@ import { MAPS_URL } from '../constants/content'
 import FloralVineFrameSvg from './svgs/FloralVineFrameSvg'
 import FloralDividerSvg from './svgs/FloralDividerSvg'
 import { CalendarIcon, LocationPinIcon } from './svgs/Icons'
+import ReceptionCardBackground from './ReceptionCardBackground'
 
 /**
  * EventCard: Ashok Mahaal Reception details, continuous glowing Shrub Vines border, and direct navigation/calendar action buttons
@@ -28,6 +29,9 @@ export default function EventCard({ t, lang }) {
 
       {/* Royal Reception Card with Connected Glowing Shrub Vines Border Frame */}
       <article className="event-card">
+        {/* Automated Crossfading Couple Photo Background (cs1 to cs5) */}
+        <ReceptionCardBackground />
+
         {/* Sacred Flowing Shrub Vines Border Frame SVG */}
         <FloralVineFrameSvg />
 
