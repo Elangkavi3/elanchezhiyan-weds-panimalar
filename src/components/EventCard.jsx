@@ -3,6 +3,7 @@ import FloralVineFrameSvg from './svgs/FloralVineFrameSvg'
 import FloralDividerSvg from './svgs/FloralDividerSvg'
 import { CalendarIcon, LocationPinIcon } from './svgs/Icons'
 import ReceptionCardBackground from './ReceptionCardBackground'
+import VenueMapCard from './VenueMapCard'
 
 /**
  * EventCard: Ashok Mahaal Reception details, continuous glowing Shrub Vines border, and direct navigation/calendar action buttons
@@ -105,6 +106,9 @@ export default function EventCard({ t, lang }) {
           </div>
         </div>
       </article>
+
+      {/* Venue Map Card with Embedded Google Map Iframe (Below Grand Reception) */}
+      <VenueMapCard t={t} lang={lang} />
     </section>
   )
 }

@@ -5,6 +5,7 @@ export const EVENT_END_DATE = new Date(TARGET_DATE.getTime() + EVENT_DURATION_HO
 
 export const WEBSITE_URL = "https://elanchezhiyan-weds-panimalar.vercel.app/"
 export const MAPS_URL = "https://www.google.com/maps/place/Ashok+Mahaal/@12.7526117,78.698805,63m/data=!3m1!1e3!4m6!3m5!1s0x3bad087c311ea8fd:0x5586ba87a7ca2b99!8m2!3d12.7526875!4d78.6989375!16s%2Fg%2F11cn94d6w1"
+export const MAPS_EMBED_URL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3893.0768!2d78.698805!3d12.7526117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bad087c311ea8fd%3A0x5586ba87a7ca2b99!2sAshok%20Mahaal!5e0!3m2!1sen!2sin!4v1725480000000!5m2!1sen!2sin"
 
 // Bilingual Content Dictionary
 export const CONTENT = {
@@ -38,6 +39,9 @@ export const CONTENT = {
     venueLabel: "Venue",
     venueName: "Ashok Mahaal",
     mapHint: "Tap \"View on Google Maps\" below for directions",
+    mapCardBadge: "📍 Venue Location",
+    mapCardTitle: "Ashok Mahaal Route Map",
+    mapCardDirections: "Open in Google Maps App",
     btnMap: "View on Google Maps",
     btnCalendar: "Add to Calendar",
     btnBlessings: "Shower Blessings",
@@ -77,6 +81,9 @@ export const CONTENT = {
     venueLabel: "இடம்",
     venueName: "அசோக் மஹால்",
     mapHint: "வழி அறிய கீழே உள்ள \"கூகிள் மேப்\" பொத்தானை அழுத்தவும்",
+    mapCardBadge: "📍 மண்டப அமைவிடம்",
+    mapCardTitle: "அசோக் மஹால் வரைபடம்",
+    mapCardDirections: "கூகிள் மேப் வழிகாட்டல்",
     btnMap: "கூகிள் மேப் பார்க்க",
     btnCalendar: "கேலெண்டரில் சேர்க்க",
     btnBlessings: "ஆசி வழங்குக",

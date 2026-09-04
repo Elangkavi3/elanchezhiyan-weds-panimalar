@@ -1044,6 +1044,143 @@
 }
 
 /* ========================================================
+   VENUE MAP CARD (BELOW GRAND RECEPTION)
+   ======================================================== */
+.venue-map-card {
+  background: var(--royal-card-bg);
+  border-radius: 18px;
+  border: 1.5px solid rgba(15, 118, 110, 0.35);
+  padding: 16px 14px 14px;
+  box-shadow: var(--festive-shadow);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.map-card-accent-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3.5px;
+  background: linear-gradient(90deg, #0f766e 0%, #c99a3e 50%, #0e7490 100%);
+}
+
+.map-card-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.map-badge-wrapper {
+  margin-bottom: 2px;
+}
+
+.map-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: #f0fdfa;
+  color: var(--peacock-primary);
+  border: 1px solid #99f6e4;
+  box-shadow: 0 2px 6px rgba(15, 118, 110, 0.1);
+}
+
+.map-card-title {
+  font-family: var(--font-royal);
+  font-size: 17.5px;
+  font-weight: 800;
+  color: var(--peacock-dark);
+  margin: 0;
+}
+
+.map-card-address {
+  font-size: 12px;
+  color: var(--peacock-deep);
+  margin: 0;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* Embedded Google Map Iframe Container */
+.map-iframe-wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid rgba(15, 118, 110, 0.28);
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.12);
+  background: #e2e8f0;
+  line-height: 0;
+}
+
+.map-iframe {
+  width: 100%;
+  height: 230px;
+  border: 0;
+  display: block;
+  filter: saturate(1.06) contrast(1.02);
+}
+
+.map-frame-reflection {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 12px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+.map-card-footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.map-direct-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 12px;
+  background: var(--peacock-gradient);
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  text-align: center;
+}
+
+.map-direct-btn:hover {
+  box-shadow: 0 6px 18px rgba(15, 118, 110, 0.48);
+  transform: translateY(-1px);
+}
+
+.map-direct-btn:active {
+  transform: scale(0.97);
+}
+
+.map-direct-btn .btn-svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+/* ========================================================
    FLOATING STICKY BLESSINGS & SHARE DOCK (ICON ONLY)
    ======================================================== */
 .floating-actions {
